@@ -1,11 +1,11 @@
-public class PS1_Jose_Mojica_Perez
+public class RecursiveMultiply
 {
 	public static void main(String[] args)
 	{	
 		long startTime = System.currentTimeMillis();
 		
-		int a = 20, b = 15;
-		int product = Multiply(a,b);
+		int a = 20000000, b = 20000000;
+		int product = mult(a,b);
 		System.out.println(product);
 		
 		long endTime = System.currentTimeMillis();
@@ -13,7 +13,7 @@ public class PS1_Jose_Mojica_Perez
 		System.out.println(totalTime + " ms");
 	
 	}
-	private static int Multiply(int x, int y)
+	private static int mult(int x, int y)
 	{
 		if(y == 1)
 		{
