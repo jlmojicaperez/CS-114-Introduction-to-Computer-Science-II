@@ -20,7 +20,7 @@ public class RecursiveMultiply{
 		System.out.println(product);
 	}
 	
-	private static long mult(long x, long y){
+	public static long mult(long x, long y){
 		/* mult takes in integers x and y that satisfy the following 
 		 * 1 <= x <= y < 10^9
 		 * and returns their product
