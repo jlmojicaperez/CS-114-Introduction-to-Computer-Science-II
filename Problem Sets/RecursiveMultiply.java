@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 public class RecursiveMultiply{
 	public static void main(String[] args){	
-		
+	
 		Scanner scan = new Scanner(System.in);
 		long a = Integer.parseInt(scan.next());
 		long b = Integer.parseInt(scan.next());
