@@ -15,7 +15,6 @@ public class RecursiveMultiply{
 		Scanner scan = new Scanner(System.in);
 		long a = Integer.parseInt(scan.next());
 		long b = Integer.parseInt(scan.next());
-		
 		long product = mult(a, b);
 		System.out.println(product);
 	}
