@@ -34,7 +34,6 @@ public class MostAnagrams{
 	public static void main(String[] args){
 		
 		Scanner scan = new Scanner(System.in);
-		//int lines = Integer.parseInt(args[0]);
 		int lines = Integer.parseInt(scan.next());
 		String fileName = "words.txt";
 		ArrayList<String> words = new ArrayList<String>();
