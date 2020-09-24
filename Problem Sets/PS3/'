@@ -49,22 +49,19 @@ public class MostAnagrams{
 
 
 		ArrayList<String> mostAnagrams = maxAnagrams(words);
-		if(mostAnagrams.size() > 1){	
-			System.out.println(mostAnagrams.size());
-			for(int j = 0; j < mostAnagrams.size(); j++){
+		
+		System.out.println(mostAnagrams.size());
+		for(int j = 0; j < mostAnagrams.size(); j++){
 			System.out.println(mostAnagrams.get(j));
-			}
-		}
-		else{
-			System.out.println(0);
 		}
 	}
 	public static ArrayList<String> maxAnagrams(ArrayList<String> words){
 		
 		int size = words.size();
+		ArrayList<String> mostAnagrams = new ArrayList<String>();
 		WordArray wordArray = new WordArray(words, size);
-		for(int i = 0; i < size; i++){
-			String word = words.get(i);
+		for(int i = 0; i < lines && reader.hasNextLine(); i++){
+			String word = word.get(j);
 			char[] wordChars = word.toCharArray();
 			Arrays.sort(wordChars);
 			wordArray.array[i].str = new String(wordChars);
@@ -80,7 +77,7 @@ public class MostAnagrams{
 		int currIndex = 0;
 		int bestIndex = 0;
 
-		for(int j = 0; j < size; j++){
+		for(int j = 0; j < linesRead; j++){
 			if(currWord.str.equals(wordArray.array[j].str)){
 				currCount++;
 			}
@@ -101,14 +98,12 @@ public class MostAnagrams{
 			maxCount = currCount;
 			bestIndex = currIndex;
 		}
-		
-		ArrayList<String> mostAnagrams = new ArrayList<String>();
-		
 		for(int k = bestIndex; k < bestIndex + maxCount; k++){
 			if(wordArray.array[k].str.equals(bestWord.str)){
-				mostAnagrams.add(words.get(wordArray.array[k].index));
+				mostAnagrams.add(words[wordArray.array[k].index]);
 			}
 		}
+
 		return mostAnagrams;
 	}
 	static class Word{
@@ -124,12 +119,12 @@ public class MostAnagrams{
 		Word[] array;
 		int size;
 
-		public WordArray(ArrayList<String> str, int size){
+		public WordArray(String str[], int size){
 			this.size = size;
 			this.array = new Word[size];
 
 			for(int index = 0; index < size; index++){
-				this.array[index] = new Word(str.get(index), index);
+				this.array[index] = new Word(str[index], index);
 			}
 		}
 	}
