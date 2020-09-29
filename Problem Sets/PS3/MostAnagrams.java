@@ -14,15 +14,14 @@ import java.io.FileNotFoundException;
  * words that have that number of anagrams, ordered alphabetically
  * 
  * @author Jose Mojica Perez
- * @version 2.0
- * @since 2020-09-24
+ * @version 2.1
+ * @since 2020-09-28
  *
  */
 
 /*
- * The program first iterates twice (to avoid errors if the user asks for more lines than there are available)
- * over n lines in the file to read and populate two arrays of string objects with n strings.
- * While doing that it sorts the characters of the string alphabetically before saving 
+ * The program first iterates over n lines in the file to read and populate two arrays of string objects 
+ * with n strings. While doing that it sorts the characters of the string alphabetically before saving 
  * it to one of the arrays. Then it iterates over n strings to find the word with the highest number
  * of anagrams, k. Finally it iterates over k anagrams and stores them to the list which contains the 
  * final result. If we let m be the maximum length of the strings, then we have a time complexity of:
@@ -33,43 +32,35 @@ import java.io.FileNotFoundException;
 public class MostAnagrams{
 	public static void main(String[] args){
 		
-		Scanner scan = new Scanner(System.in);
-		int lines = Integer.parseInt(scan.next());
+		int lines = Integer.parseInt(args[0]);
 		String fileName = "words.txt";
-		ArrayList<String> words = new ArrayList<String>();
+		
+		ArrayList<String> mostAnagrams = maxAnagrams(fileName, lines);
+		
+		System.out.println(mostAnagrams.size());
+		for(int j = 0; j < mostAnagrams.size(); j++){
+			System.out.println(mostAnagrams.get(j));
+		}
+	}
+	public static ArrayList<String> maxAnagrams(String fileName, int lines){
+		
+		ArrayList<String> mostAnagrams = new ArrayList<String>();
+		
+		String[] words = new String[lines];
+		WordArray wordArray = new WordArray(words, lines);
 		try{
 			Scanner reader = new Scanner(new File(fileName));
 			for(int i = 0; i < lines && reader.hasNextLine(); i++){
 				String word = reader.nextLine();
-				words.add(word);
+				words[i] = word;
+				char[] wordChars = word.toCharArray();
+				Arrays.sort(wordChars);
+				wordArray.array[i].str = new String(wordChars);
+		
 			} 
 		}
 		catch(FileNotFoundException e) {e.printStackTrace();}
 
-
-		ArrayList<String> mostAnagrams = maxAnagrams(words);
-		if(mostAnagrams.size() > 1){	
-			System.out.println(mostAnagrams.size());
-			for(int j = 0; j < mostAnagrams.size(); j++){
-			System.out.println(mostAnagrams.get(j));
-			}
-		}
-		else{
-			System.out.println(0);
-		}
-	}
-	public static ArrayList<String> maxAnagrams(ArrayList<String> words){
-		
-		int size = words.size();
-		WordArray wordArray = new WordArray(words, size);
-		for(int i = 0; i < size; i++){
-			String word = words.get(i);
-			char[] wordChars = word.toCharArray();
-			Arrays.sort(wordChars);
-			wordArray.array[i].str = new String(wordChars);
-		
-		} 
-		
 		Arrays.sort(wordArray.array, new WordComparator());
 		
 		Word currWord = wordArray.array[0];
@@ -79,7 +70,7 @@ public class MostAnagrams{
 		int currIndex = 0;
 		int bestIndex = 0;
 
-		for(int j = 0; j < size; j++){
+		for(int j = 0; j < lines; j++){
 			if(currWord.str.equals(wordArray.array[j].str)){
 				currCount++;
 			}
@@ -100,14 +91,12 @@ public class MostAnagrams{
 			maxCount = currCount;
 			bestIndex = currIndex;
 		}
-		
-		ArrayList<String> mostAnagrams = new ArrayList<String>();
-		
 		for(int k = bestIndex; k < bestIndex + maxCount; k++){
 			if(wordArray.array[k].str.equals(bestWord.str)){
-				mostAnagrams.add(words.get(wordArray.array[k].index));
+				mostAnagrams.add(words[wordArray.array[k].index]);
 			}
 		}
+
 		return mostAnagrams;
 	}
 	static class Word{
@@ -123,12 +112,12 @@ public class MostAnagrams{
 		Word[] array;
 		int size;
 
-		public WordArray(ArrayList<String> str, int size){
+		public WordArray(String str[], int size){
 			this.size = size;
 			this.array = new Word[size];
 
 			for(int index = 0; index < size; index++){
-				this.array[index] = new Word(str.get(index), index);
+				this.array[index] = new Word(str[index], index);
 			}
 		}
 	}
