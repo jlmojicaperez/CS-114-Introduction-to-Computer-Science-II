@@ -28,85 +28,33 @@ import java.util.Stack;
 public class SumsTo{
 	public static void main(String[] args){
 		Scanner scan = new Scanner(System.in);
-		String digits = scan.next();
-		long desired = Long.parseLong(scan.next());
-		Stack<String> answer = new Stack<String>();
-		
-		leftDecomp("", digits, desired, answer);
-		if(answer.peek().equals("left false")){
-			rightDecomp(digits, "", desired, answer);
-		}
+	        String digits = scan.next();
+		long goal = Long.parseLong(scan.next());
 
-		String output = answer.pop();
-		if(output.equals("right false")){
-			System.out.println("false");
-		}
-		else if(output.equals("rightDecomp")){
-			String out = "";
-			while(!answer.peek().equals("left false")){
-				out = "+" + answer.pop() + out;
-			}
-			System.out.print(out.substring(1, out.length()));
-		}
-		else if(output.equals("leftDecomp")){
-			System.out.print(answer.pop());
-			while(!answer.isEmpty()){
-				System.out.print("+" + answer.pop());
-			}
-		}
-		else{
-			System.out.print("false?");
-		}
+	        String expression = "";
+	        int index = 0;
+	        long sum = 0;
+
+	        sumTo(expression, digits, goal, index, sum);
+	
+	        if(output.equals(""))
+	            System.out.println("false");
+	        else
+	            System.out.print(output.substring(1));
 	}
-	public static void leftDecomp(String left, String right, long desired, Stack<String> answer){
-		if(right.length() != 0 && Long.parseLong(right) == desired && left.equals("")){
-			answer.push(right);
-			answer.push("leftDecomp");
-			return;
+
+	static String output = "";
+	public static void sumTo(String expression, String digits, long goal, int index, long sum){
+		//System.out.println(expression + "\t" + sum + "\t" + output);
+		if(index > digits.length() - 1 && sum == goal){
+	        	output = expression;
+	        	return;
 		}
-		else if(right.length() != 0){
-			long rightNum = Long.parseLong(right);
-			if(rightNum < desired){
-				answer.push(right);
-				desired -= rightNum;
-				leftDecomp("", left, desired, answer);
-			}
-			else{
-				left += right.substring(0,1);
-				right = right.substring(1,right.length());
-				leftDecomp(left,right,desired,answer);
-			}
-		}
-		else{
-			answer.push("left false");
-			return;
+		for(int i = index; i < digits.length() && output.equals(""); i++){
+			String addExpress = digits.substring(index, i + 1);
+			long addValue = Long.parseLong(addExpress);
+			sumTo(expression + "+" + addExpress , digits, goal, i + 1, sum + addValue);
 		}
 		return;
 	}
-
-	public static void rightDecomp(String left, String right, long desired, Stack<String> answer){
-		if(left.length() != 0 && Long.parseLong(left) == desired && right.equals("")){
-			answer.push(left);
-			answer.push("rightDecomp");
-			return;
-		}
-		else if(left.length() != 0){
-			long leftNum = Long.parseLong(left);
-			if(leftNum < desired){
-				answer.push(left);
-				desired -= leftNum;
-				rightDecomp(right, "", desired, answer);
-			}
-			else{
-				right = left.substring(left.length()-1, left.length()) + right;
-				left = left.substring(0,left.length()-1);
-				rightDecomp(left,right,desired,answer);
-			}
-		}
-		else{
-			answer.push("right false");
-			return;
-		}
-		return;
-	}
-}
+}	
