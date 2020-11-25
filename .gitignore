@@ -14,5 +14,9 @@ hs_err_pid*
 #Personal
 **/Textbook
 **/Lectures
+**/birds
 *.pdf
 *.png
+*.ppm
+*.gz
+*.zip
