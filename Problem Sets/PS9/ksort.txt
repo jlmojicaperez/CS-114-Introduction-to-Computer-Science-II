@@ -1,0 +1,43 @@
+//Initial call to the recursive function should
+//use left = beginning of the array and right = end of the array
+
+ksort(array, k){
+	ksort(array, 0, array.length-1, k)
+}
+
+ksort(array, left, right, k){
+
+	//This conditional ensures that partitions
+	//of length <= k are not completely sorted
+	
+	if(abs(right-left) <= k) 
+		return
+
+	
+	middleIndex = (left+right)/2
+	pivot = array[middleIndex]
+
+	partitionIndex = partition(array, left, right)
+
+	ksort(left, partitionIndex-1, k)
+	ksort(partitionIndex, right)
+}
+
+partition(array, left, right){
+	while (left <= right)
+		while(array[left] < pivot)
+			left++
+		while(array[right] > pivot)
+			right--
+		if(left<=right{
+			swap(array, left, right);
+			left++
+			right--
+		}
+		return left
+}
+swap(array, i, j){
+	int temp = array[j]
+	array[j] = array[i]
+	array[i]= temp 
+}
