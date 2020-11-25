@@ -10,14 +10,14 @@ import java.io.FileNotFoundException;
  *
  * words.txt contains words separated by the new line character
  *
- * The program outputs the largest number of anagrams found followed by a list of the
- * words that have that number of anagrams, ordered alphabetically
+ * The program outputs how many anagrams exist in n lines followed by the largest 
+ * number of anagrams found followed by a list of the words that have that number 
+ * of anagrams, ordered alphabetically
  * 
  * @author Jose Mojica Perez
- * @version 2.1
+ * @version 3.0
  * @since 2020-09-28
- *
- */
+ **/
 
 /*
  * The program first iterates over n lines in the file to read and populate two arrays of string objects 
@@ -31,10 +31,11 @@ import java.io.FileNotFoundException;
 
 public class MostAnagrams{
 	public static void main(String[] args){
-		
-		int lines = Integer.parseInt(args[0]);
+		Scanner scan = new Scanner(System.in);
+		int lines = Integer.parseInt(scan.next());
 		String fileName = "words.txt";
-		
+		scan.close();
+
 		ArrayList<String> mostAnagrams = maxAnagrams(fileName, lines);
 		
 		System.out.println(mostAnagrams.size());
@@ -43,36 +44,35 @@ public class MostAnagrams{
 		}
 	}
 	public static ArrayList<String> maxAnagrams(String fileName, int lines){
-		
-		ArrayList<String> mostAnagrams = new ArrayList<String>();
-		
-		String[] words = new String[lines];
-		WordArray wordArray = new WordArray(words, lines);
+		String[] originalWords = new String[lines];
+		Word[] wordArray = new Word[lines];
 		try{
 			Scanner reader = new Scanner(new File(fileName));
 			for(int i = 0; i < lines && reader.hasNextLine(); i++){
 				String word = reader.nextLine();
-				words[i] = word;
-				char[] wordChars = word.toCharArray();
-				Arrays.sort(wordChars);
-				wordArray.array[i].str = new String(wordChars);
+				originalWords[i] = word;
+				wordArray[i] = new Word(word, i);
 		
 			} 
 		}
-		catch(FileNotFoundException e) {e.printStackTrace();}
+		catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
-		Arrays.sort(wordArray.array, new WordComparator());
+		Arrays.sort(wordArray, new WordComparator());
 		
-		Word currWord = wordArray.array[0];
-		Word bestWord = wordArray.array[0];
+		Word currWord = wordArray[0];
+		Word bestWord = wordArray[0];
 		int currCount = 1;
 		int maxCount = 1;
 		int currIndex = 0;
 		int bestIndex = 0;
+		int anagramCount = 1;
 
 		for(int j = 0; j < lines; j++){
-			if(currWord.str.equals(wordArray.array[j].str)){
+			if(currWord.getSortedChars().equals(wordArray[j].getSortedChars())){
 				currCount++;
+				anagramCount++;
 			}
 			else if(maxCount < currCount){
 				maxCount = currCount;
@@ -81,7 +81,7 @@ public class MostAnagrams{
 
 			}
 			else{
-				currWord = wordArray.array[j];
+				currWord = wordArray[j];
 				currCount = 1;
 				currIndex = j;
 			}
@@ -91,39 +91,39 @@ public class MostAnagrams{
 			maxCount = currCount;
 			bestIndex = currIndex;
 		}
+		System.out.println(anagramCount);
+		ArrayList<String> mostAnagrams = new ArrayList<String>();
 		for(int k = bestIndex; k < bestIndex + maxCount; k++){
-			if(wordArray.array[k].str.equals(bestWord.str)){
-				mostAnagrams.add(words[wordArray.array[k].index]);
+			if(wordArray[k].getSortedChars().equals(bestWord.getSortedChars())){
+				mostAnagrams.add(originalWords[wordArray[k].getIndex()]);
 			}
 		}
-
 		return mostAnagrams;
 	}
-	static class Word{
-		String str;
-		int index;
-
-		public Word(String str, int index){
-			this.str = str;
-			this.index = index;
-		}
+}
+class Word{
+	private String str;
+	private int index;
+	private String sortedChars;
+	public Word(String str, int index){
+		this.str = str;
+		this.index = index;
+		char[] chars = str.toCharArray();
+		Arrays.sort(chars);
+		this.sortedChars = new String(chars);
 	}
-	static class WordArray{
-		Word[] array;
-		int size;
-
-		public WordArray(String str[], int size){
-			this.size = size;
-			this.array = new Word[size];
-
-			for(int index = 0; index < size; index++){
-				this.array[index] = new Word(str[index], index);
-			}
-		}
+	public int getIndex(){
+		return this.index;
 	}
-	static class WordComparator implements Comparator<Word>{
-		public int compare(Word a, Word b){
-			return a.str.compareTo(b.str);
-		}		
+	public String getStr(){
+		return this.str;
 	}
+	public String getSortedChars(){
+		return this.sortedChars;
+	}
+}
+class WordComparator implements Comparator<Word>{
+	public int compare(Word a, Word b){
+		return a.getSortedChars().compareTo(b.getSortedChars());
+	}		
 }
