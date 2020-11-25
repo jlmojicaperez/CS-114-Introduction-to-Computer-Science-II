@@ -54,7 +54,7 @@ public class SmallWorld{
 		for(MovieRecord curRecord : movieBST.values()){            
             for(int i : curRecord.actors){
                 for(int j : curRecord.actors){
-                    if(i==j){
+                    if(i==j || actorGraph.isEdge(i,j)){
                         continue;
                     }
                     actorGraph.setEdge(i, j, 0);
